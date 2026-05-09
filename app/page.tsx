@@ -1,6 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 import ReactMarkdown from 'react-markdown'
 
 export default function Home() {
@@ -12,9 +16,59 @@ const [messages, setMessages] = useState<
     citations?: string[]
   }[]
 >([])
-  const [response, setResponse] = useState('')
+
   const [loading, setLoading] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement | null>(null)
+  const [sessionId, setSessionId] =
+  useState('')
+  const [conversations, setConversations] =
+  useState<any[]>([])
+
+  const fetchConversationHistory =
+  async (sessionId: string) => {
+    const res = await fetch(
+      `http://127.0.0.1:8000/conversations/${sessionId}`
+    )
+
+    const data = await res.json()
+
+    if (data.messages) {
+      const formattedMessages =
+        data.messages.map((msg: any) => ({
+          role: msg.role,
+          content: msg.content,
+          citations: msg.citations || []
+        }))
+
+      setMessages(formattedMessages)
+    }
+  }
+
+const fetchConversations = async () => {
+  const res = await fetch(
+    'http://127.0.0.1:8000/conversations'
+  )
+
+  const data = await res.json()
+  
+
+  if (data.conversations) {
+    setConversations(data.conversations)
+  }
+}
+const startNewChat = () => {
+  const newSessionId =
+    crypto.randomUUID()
+
+  localStorage.setItem(
+    'session_id',
+    newSessionId
+  )
+
+  setSessionId(newSessionId)
+
+  setMessages([])
+}
 
   const askQuestion = async () => {
   if (!query.trim()) return
@@ -34,7 +88,7 @@ const [messages, setMessages] = useState<
     }
   ])
 
-  setResponse('')
+
   const metadataRes = await fetch(
   'http://127.0.0.1:8000/ask',
   {
@@ -44,7 +98,8 @@ const [messages, setMessages] = useState<
       'x-api-key': 'rajandass-enterprise-ai-2026-secure'
     },
     body: JSON.stringify({
-      query
+      query,
+      session_id: sessionId
     })
   }
 )
@@ -61,7 +116,8 @@ console.log(metadata)
         'x-api-key': 'rajandass-enterprise-ai-2026-secure'
       },
       body: JSON.stringify({
-        query
+        query,
+        session_id: sessionId
       })
     }
   )
@@ -114,15 +170,78 @@ console.log(metadata)
     behavior: 'smooth'
   })
 }, [messages])
+  useEffect(() => {
+    let existingSessionId =
+      localStorage.getItem('session_id')
 
-  return (
-    <main className="h-screen bg-black text-white flex flex-col">
-      <div className="flex-1 max-w-4xl w-full mx-auto flex flex-col p-4 overflow-hidden">
+    if (!existingSessionId) {
+      existingSessionId =
+        crypto.randomUUID()
+
+      localStorage.setItem(
+        'session_id',
+        existingSessionId
+      )
+    }
+
+    setSessionId(existingSessionId)
+    fetchConversationHistory(
+        existingSessionId
+        )
+    fetchConversations()  
+
+  }, [])
+
+return (
+  <main className="h-screen bg-black text-white flex overflow-hidden">
+    
+    {/* Sidebar */}
+    <div className="w-80 border-r border-zinc-800 p-4 overflow-y-auto">
+      <h2 className="text-xl font-bold mb-4">
+        Conversations
+      </h2>
+    <button
+      onClick={startNewChat}
+      className="w-full mb-4 p-3 rounded-xl bg-blue-600 hover:bg-blue-500 transition font-semibold"
+    >
+      + New Chat
+    </button>
+      <div className="space-y-2">
+        {conversations.map((conversation) => (
+          <button
+            key={conversation.session_id}
+            onClick={() => {
+                  setSessionId(conversation.session_id)
+
+              localStorage.setItem(
+                'session_id',
+                conversation.session_id
+              )
+
+              fetchConversationHistory(
+                conversation.session_id
+              )
+            }}
+            className="w-full text-left p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 transition"
+          >
+            <div className="truncate text-sm">
+               {conversation.title}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Chat Area */}
+    <div className="flex-1 flex flex-col overflow-hidden">
+      
+      <div className="max-w-4xl w-full mx-auto flex flex-col h-full p-4">
+        
         <h1 className="text-4xl font-bold mb-8">
           Enterprise AI Support Agent
         </h1>
 
-
+        {/* Messages */}
         <div className="flex-1 overflow-y-auto space-y-4 mb-4">
           {messages.map((message, index) => (
             <div
@@ -170,32 +289,38 @@ console.log(metadata)
 
           <div ref={messagesEndRef} />
         </div>
-          <div className="border-t border-zinc-800 pt-4">
-            <textarea
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    askQuestion()
-                  }
-                }}
-              placeholder="Ask a question..."
-              className="w-full h-24 bg-zinc-800 rounded-xl p-4 outline-none resize-none"
-            />
 
-            <button
-              onClick={askQuestion}
-              disabled={loading}
-              className="mt-4 px-6 py-3 bg-blue-600 rounded-xl font-semibold hover:bg-blue-500 disabled:opacity-50"
-            >
-              {loading ? 'Streaming...' : 'Ask AI'}
-            </button>
-          </div>      
+        {/* Input */}
+        <div className="border-t border-zinc-800 pt-4">
+          <textarea
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (
+                e.key === 'Enter' &&
+                !e.shiftKey
+              ) {
+                e.preventDefault()
+                askQuestion()
+              }
+            }}
+            placeholder="Ask a question..."
+            className="w-full h-24 bg-zinc-800 rounded-xl p-4 outline-none resize-none"
+          />
 
-
+          <button
+            onClick={askQuestion}
+            disabled={loading}
+            className="mt-4 px-6 py-3 bg-blue-600 rounded-xl font-semibold hover:bg-blue-500 disabled:opacity-50"
+          >
+            {loading
+              ? 'Streaming...'
+              : 'Ask AI'}
+          </button>
+        </div>
 
       </div>
-    </main>
+    </div>
+  </main>
   )
 }
