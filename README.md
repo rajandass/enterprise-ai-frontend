@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Enterprise AI Support Agent — Frontend
 
-## Getting Started
+A production-style enterprise AI assistant frontend built with Next.js, TypeScript, and Tailwind CSS.
 
-First, run the development server:
+This application provides a modern conversational AI interface with streaming responses, persistent conversations, citation rendering, and multi-session chat management.
+
+---
+
+# 🚀 Features
+
+## Conversational AI UI
+- Streaming AI responses
+- Markdown rendering
+- Typing indicator
+- Auto-scroll
+- Enter-to-send support
+
+## Persistent Conversations
+- Multi-session chat support
+- Persistent chat history
+- Conversation sidebar
+- New chat creation
+- Conversation switching
+
+## Citation System
+- Source citation rendering
+- Persistent citation history
+- RAG-compatible UX
+
+## Enterprise UX
+- Responsive chat layout
+- Sidebar navigation
+- Session-based conversations
+- Real-time streaming updates
+
+---
+
+# 🚀 Tech Stack
+
+- Next.js 15
+- React
+- TypeScript
+- Tailwind CSS
+- React Markdown
+
+---
+
+# 🚀 Backend Integration
+
+Frontend integrates with the Enterprise AI FastAPI backend:
+
+- `/ask`
+- `/ask-stream`
+- `/conversations`
+- `/conversations/{session_id}`
+
+---
+
+# 🚀 Local Development
+
+## Install dependencies
+
+```bash
+npm install
+```
+
+## Start development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Application runs at:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+# 🚀 Environment Requirements
 
-To learn more about Next.js, take a look at the following resources:
+Backend API expected at:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```text
+http://127.0.0.1:8000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+# 🚀 Current Capabilities
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Streaming conversational AI
+- Persistent chat sessions
+- Cosmos DB-backed conversations
+- Citation persistence
+- Multi-chat workspace
+- Session metadata support
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+# 🚀 Planned Features
+
+- Conversation rename
+- Conversation delete
+- Responsive mobile layout
+- Authentication
+- File upload support
+- Multi-agent workflows
+- Syntax highlighting
+- Voice support
+
+---
+
+# 🚀 Architecture
+
+Frontend communicates with:
+- FastAPI backend
+- Azure Cosmos DB
+- Redis cache
+- Azure-hosted AI services
+
+---
+
+# 🚀 Status
+
+Active enterprise AI platform development project.
