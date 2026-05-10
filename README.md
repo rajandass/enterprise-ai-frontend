@@ -1,76 +1,134 @@
 # Enterprise AI Support Agent — Frontend
 
-A production-style enterprise AI assistant frontend built with Next.js, TypeScript, and Tailwind CSS.
-
-This application provides a modern conversational AI interface with streaming responses, persistent conversations, citation rendering, and multi-session chat management.
+Enterprise-grade AI chat frontend built with Next.js, TypeScript, Tailwind CSS, and Docker.  
+This application provides a production-ready conversational AI interface with streaming responses, persistent chat history, citations, and Azure cloud deployment.
 
 ---
 
 # 🚀 Features
 
-## Conversational AI UI
-- Streaming AI responses
+- Real-time AI streaming responses
+- Persistent conversation history
+- Conversation sidebar with session management
+- Source citations support
 - Markdown rendering
-- Typing indicator
-- Auto-scroll
-- Enter-to-send support
-
-## Persistent Conversations
-- Multi-session chat support
-- Persistent chat history
-- Conversation sidebar
-- New chat creation
-- Conversation switching
-
-## Citation System
-- Source citation rendering
-- Persistent citation history
-- RAG-compatible UX
-
-## Enterprise UX
-- Responsive chat layout
-- Sidebar navigation
-- Session-based conversations
-- Real-time streaming updates
+- New chat workflow
+- Cosmos DB-backed chat persistence
+- Dockerized frontend deployment
+- Azure App Service deployment
+- GitHub Actions CI/CD pipeline
+- Approval-based production deployments
+- Production-ready architecture
 
 ---
 
-# 🚀 Tech Stack
+# 🏗️ Architecture
 
+## Application Architecture
+
+```text
+Next.js Frontend
+        ↓
+FastAPI Backend API
+        ↓
+OpenAI APIs
+Cosmos DB
+Redis Cache
+```
+
+---
+
+## Deployment Architecture
+
+```text
+GitHub Actions
+        ↓
+Docker Build
+        ↓
+Azure Container Registry
+        ↓
+Azure App Service
+```
+
+---
+
+# 🛠️ Tech Stack
+
+## Frontend
 - Next.js 15
 - React
 - TypeScript
 - Tailwind CSS
 - React Markdown
 
+## Infrastructure
+- Docker
+- Azure App Service
+- Azure Container Registry (ACR)
+- GitHub Actions
+
+## Backend Integration
+- FastAPI
+- OpenAI APIs
+- Cosmos DB
+- Redis
+
 ---
 
-# 🚀 Backend Integration
+# 📁 Project Structure
 
-Frontend integrates with the Enterprise AI FastAPI backend:
-
-- `/ask`
-- `/ask-stream`
-- `/conversations`
-- `/conversations/{session_id}`
+```text
+enterprise-ai-frontend/
+│
+├── app/
+│   ├── page.tsx
+│   ├── globals.css
+│   └── layout.tsx
+│
+├── public/
+│
+├── .github/
+│   └── workflows/
+│       └── frontend-deploy.yml
+│
+├── Dockerfile
+├── next.config.ts
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── README.md
+```
 
 ---
 
-# 🚀 Local Development
+# ⚙️ Environment Variables
 
-## Install dependencies
+Create a `.env.local` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_API_KEY=your-api-key
+```
+
+---
+
+# 💻 Local Development
+
+## Install Dependencies
 
 ```bash
 npm install
 ```
 
-## Start development server
+---
+
+## Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Application runs at:
+Frontend runs on:
 
 ```text
 http://localhost:3000
@@ -78,50 +136,163 @@ http://localhost:3000
 
 ---
 
-# 🚀 Environment Requirements
+# 🐳 Docker Setup
 
-Backend API expected at:
+## Build Docker Image
 
-```text
-http://127.0.0.1:8000
+```bash
+docker build \
+  --build-arg NEXT_PUBLIC_API_URL=http://localhost:8000 \
+  --build-arg NEXT_PUBLIC_API_KEY=your-api-key \
+  -t enterprise-ai-frontend .
 ```
 
 ---
 
-# 🚀 Current Capabilities
+## Run Docker Container
 
-- Streaming conversational AI
-- Persistent chat sessions
-- Cosmos DB-backed conversations
-- Citation persistence
-- Multi-chat workspace
-- Session metadata support
+```bash
+docker run -p 3000:3000 enterprise-ai-frontend
+```
 
 ---
 
-# 🚀 Planned Features
+# ☁️ Azure Deployment
 
-- Conversation rename
-- Conversation delete
-- Responsive mobile layout
-- Authentication
-- File upload support
-- Multi-agent workflows
-- Syntax highlighting
-- Voice support
+## Production Services
 
----
-
-# 🚀 Architecture
-
-Frontend communicates with:
-- FastAPI backend
-- Azure Cosmos DB
-- Redis cache
-- Azure-hosted AI services
+| Service | Purpose |
+|---|---|
+| Azure App Service | Frontend hosting |
+| Azure Container Registry | Docker image storage |
+| GitHub Actions | CI/CD automation |
 
 ---
 
-# 🚀 Status
+## Production Deployment Flow
 
-Active enterprise AI platform development project.
+```text
+Feature Branch
+      ↓
+Pull Request
+      ↓
+Merge to Main
+      ↓
+GitHub Actions Pipeline
+      ↓
+Docker Image Build
+      ↓
+Push to Azure Container Registry
+      ↓
+Approval Gate
+      ↓
+Azure App Service Deployment
+```
+
+---
+
+# 🔐 Security
+
+## Security Features
+
+- API key authentication
+- Azure Key Vault integration
+- Managed Identity support
+- Protected production branch
+- Approval-based deployments
+
+---
+
+# 🔄 CI/CD Pipeline
+
+Frontend deployment is fully automated using GitHub Actions.
+
+## Pipeline Stages
+
+1. Trigger on `main` branch merge
+2. Build Docker image
+3. Push image to Azure Container Registry
+4. Wait for deployment approval
+5. Deploy to Azure App Service
+
+---
+
+# 📡 API Integration
+
+Frontend integrates with the FastAPI backend using:
+
+```text
+/ask
+/ask-stream
+/conversations
+/conversations/{session_id}
+```
+
+---
+
+# 🧠 AI Features
+
+- Streaming chat responses
+- Retrieval-augmented generation (RAG)
+- Persistent session memory
+- Source citations
+- Multi-session chat support
+
+---
+
+# 📈 Production Capabilities
+
+## Current Production Features
+
+- Persistent conversations
+- Session metadata management
+- Streaming AI responses
+- Conversation sidebar
+- Dockerized deployment
+- Enterprise CI/CD
+- Azure cloud hosting
+
+---
+
+# 🚀 Future Roadmap
+
+## Enterprise AI Features
+
+- Document upload
+- Hybrid search
+- Semantic reranking
+- Multi-agent orchestration
+- Feedback evaluation pipelines
+- Admin analytics dashboard
+
+## Platform Engineering
+
+- Kubernetes deployment
+- Helm charts
+- Infrastructure as Code (Terraform/Bicep)
+- Centralized observability
+- Autoscaling
+
+---
+
+# 📚 Key Engineering Decisions
+
+| Decision | Reason |
+|---|---|
+| Next.js | Modern React framework with production optimizations |
+| Docker | Consistent deployment environment |
+| Azure App Service | Managed scalable hosting |
+| Cosmos DB | Persistent conversation storage |
+| Redis | High-speed caching |
+| GitHub Actions | Automated CI/CD pipeline |
+
+---
+
+# 👨‍💻 Author
+
+Enterprise AI Platform project focused on:
+- AI systems engineering
+- cloud-native architecture
+- enterprise deployment patterns
+- production-grade DevOps
+- scalable conversational AI systems
