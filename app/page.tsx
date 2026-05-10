@@ -27,7 +27,7 @@ const [messages, setMessages] = useState<
   const fetchConversationHistory =
   async (sessionId: string) => {
     const res = await fetch(
-      `http://127.0.0.1:8000/conversations/${sessionId}`
+      `${process.env.NEXT_PUBLIC_API_URL}/conversations/${sessionId}`
     )
 
     const data = await res.json()
@@ -45,8 +45,11 @@ const [messages, setMessages] = useState<
   }
 
 const fetchConversations = async () => {
+  console.log(
+  process.env.NEXT_PUBLIC_API_KEY
+)
   const res = await fetch(
-    'http://127.0.0.1:8000/conversations'
+    `${process.env.NEXT_PUBLIC_API_URL}/conversations`
   )
 
   const data = await res.json()
@@ -90,12 +93,13 @@ const startNewChat = () => {
 
 
   const metadataRes = await fetch(
-  'http://127.0.0.1:8000/ask',
+    
+  `${process.env.NEXT_PUBLIC_API_URL}/ask`,
   {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': 'rajandass-enterprise-ai-2026-secure'
+      'x-api-key': `${process.env.NEXT_PUBLIC_API_KEY}` || ''
     },
     body: JSON.stringify({
       query,
@@ -108,12 +112,12 @@ const metadata = await metadataRes.json()
 metadata.answer = ''
 console.log(metadata)
   const res = await fetch(
-    'http://127.0.0.1:8000/ask-stream',
+    `${process.env.NEXT_PUBLIC_API_URL}/ask-stream`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'rajandass-enterprise-ai-2026-secure'
+        'x-api-key': `${process.env.NEXT_PUBLIC_API_KEY}` || ''
       },
       body: JSON.stringify({
         query,
